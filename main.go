@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/disk"
@@ -128,7 +129,7 @@ func GetHardwareData(node *NodeInfo) {
 	}
 }
 
-func getAPIURL() string {
+func getConfiguration() Configuration {
 	file, _ := os.Open("conf.json")
 	defer file.Close()
 	decoder := json.NewDecoder(file)
@@ -137,11 +138,29 @@ func getAPIURL() string {
 	if err != nil {
 		fmt.Println("error:", err)
 	}
-	return configuration.URL
+
+	return configuration
+}
+
+func getAPIURL() string {
+	return getConfiguration().URL
 }
 
 func main() {
+	config := getConfiguration()
+	fmt.Println(config)
+	if config.WaitTime > 0 {
+		for {
+			fmt.Println("Start Processing...")
+			processInfo()
+			time.Sleep(time.Second * time.Duration(config.WaitTime))
+		}
+	} else {
+		processInfo()
+	}
+}
 
+func processInfo() {
 	var info InfoBase
 	//var nodeInfo NodeInfo
 	GetHardwareData(&info.NodeInfo)

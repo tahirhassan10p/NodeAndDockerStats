@@ -1,3 +1,4 @@
 {
-    "URL": "http://172.16.23.248:4000/node/stats"
+    "URL": "http://172.16.0.170:4000/node/stats",
+    "WaitTime": 10
 }

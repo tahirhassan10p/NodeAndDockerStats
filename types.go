@@ -5,7 +5,8 @@ import (
 )
 
 type Configuration struct {
-	URL string
+	URL      string
+	WaitTime int
 }
 
 type InfoBase struct {
